@@ -1,8 +1,6 @@
 import java.awt.Graphics;
 import java.awt.Image;
 
-import javax.swing.ImageIcon;
-
 public class ImagePainter extends Thread {
     private int x;
     private int y;

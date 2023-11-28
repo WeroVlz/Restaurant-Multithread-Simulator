@@ -1,4 +1,3 @@
-import java.awt.Image;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.Executors;
