@@ -85,11 +85,9 @@ public class SetupWindow extends JFrame {
     }
 
     private void createWaiterThreads(int threadNumber) {
-        // Semaphore semaphore = new Semaphore(4);
-        Object object = new Object();
 
         for (int i = 0; i < threadNumber; i++) {
-            waiters.add(new Waiter(i + 1, object));
+            waiters.add(new Waiter(i + 1));
             Thread waiter = new Thread(waiters.get(i));
             waiter.start();
         }

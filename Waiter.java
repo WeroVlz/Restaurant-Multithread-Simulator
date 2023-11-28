@@ -1,13 +1,17 @@
+import java.util.Random;
+
 public class Waiter extends Thread {
 
     public WaiterStateSettings.State state;
-    private boolean hasLeft = false;
-    private final Object object;
+    private boolean waiterBusy = false;
+    private boolean takingFood = false;
+    private boolean pickUpMoney = false;
+    private Client assignedClient;
+    Random random = new Random();
 
-    public Waiter(int i, Object object) {
+    public Waiter(int i) {
         super("Waiter " + i);
-        this.state = WaiterStateSettings.State.BORN;
-        this.object = object;
+        this.state = WaiterStateSettings.State.WAITING;
     }
 
     private void sleepThread(int time) {
@@ -18,24 +22,60 @@ public class Waiter extends Thread {
         }
     }
 
+    public boolean getIsWaiterBusy() {
+        return this.waiterBusy;
+    }
+
+    public boolean getIsTakingFood() {
+        return this.takingFood;
+    }
+
+    public Client getAssignedClient() {
+        return this.assignedClient;
+    }
+
     public WaiterStateSettings.State getWaiterState() {
         return this.state;
     }
 
+    public void takeFood(Client c) {
+        this.waiterBusy = true;
+        this.takingFood = true;
+        this.state = WaiterStateSettings.State.TAKING_FOOD;
+        this.assignedClient = c;
+    }
+
+    public void pickUpMoney() {
+        this.state = WaiterStateSettings.State.PICKUP_MONEY;
+    }
+
+    public void goToWaitingState() {
+        this.state = WaiterStateSettings.State.WAITING;
+        this.assignedClient = null;
+    }
+
     @Override
     public void run() {
-        sleepThread(1250);
-        this.state = WaiterStateSettings.State.WAITING;
-        do {
-            synchronized (object) {
-                try {
-                    sleep(750);
-                } catch (InterruptedException e) {
-                    System.out.println(e);
+        while (true) {
+            while (takingFood) {
+                int sleepTime = random.nextInt(7000 - 3000) + 3000;
+                sleepThread(sleepTime);
+                int finishEatingProbability = random.nextInt(16 - 1) + 1;
+                if (finishEatingProbability == 15) {
+                    assignedClient.setFinishEating(true);
+                    takingFood = false;
+                    pickUpMoney = true;
                 }
-
             }
-        } while (!hasLeft);
+            while (pickUpMoney) {
+                this.state = WaiterStateSettings.State.PICKUP_MONEY;
+                sleepThread(1500);
+                pickUpMoney = false;
+            }
+            goToWaitingState();
+            waiterBusy = false;
+            sleepThread(50);
+        }
     }
 
     public class WaiterStateSettings {

@@ -6,8 +6,10 @@ public class Client extends Thread {
     public ClientStateSettings.State state;
     Semaphore maxCapacityBuffer;
     Semaphore tableBuffer;
+    private static boolean isSeatingTable = false;
     private boolean finishEating = false;
-    public static boolean isSeatingTable = false;
+    private boolean wantsFood = false;
+    private boolean wantsToPay = false;
     private final Object criticalZone1;
     private final Object criticalZone2;
     Random random = new Random();
@@ -19,6 +21,34 @@ public class Client extends Thread {
         this.state = ClientStateSettings.State.BORN;
         this.maxCapacityBuffer = maxCapacityBuffer;
         this.tableBuffer = tableBuffer;
+    }
+
+    public static boolean getIsSeatingTable() {
+        return isSeatingTable;
+    }
+
+    public boolean getWantsFood() {
+        return this.wantsFood;
+    }
+
+    public void setWantsFood(boolean value) {
+        this.wantsFood = value;
+    }
+
+    public boolean getWantsToPay() {
+        return this.wantsToPay;
+    }
+
+    public void setWantsToPay(boolean value) {
+        this.wantsToPay = value;
+    }
+
+    public boolean getFinishEating() {
+        return this.finishEating;
+    }
+
+    public void setFinishEating(boolean value) {
+        this.finishEating = value;
     }
 
     private void sleepThread(int time) {
@@ -58,31 +88,26 @@ public class Client extends Thread {
 
             acquirePermit(tableBuffer);
             releasePermit(maxCapacityBuffer);
-            this.state = ClientStateSettings.State.AT_TABLE_EATING;
             isSeatingTable = true;
+            this.state = ClientStateSettings.State.AT_TABLE_EATING;
             sleepThread(750);
         }
         isSeatingTable = false;
+        wantsFood = true;
         do {
-            int sleepTime = random.nextInt(3000 - 1000) + 1000;
-            sleepThread(sleepTime);
-            int finishEatingProbability = random.nextInt(6 - 1) + 1;
-
-            if (finishEatingProbability == 5) {
-                finishEating = true;
-            }
+            sleepThread(50);
 
         } while (!finishEating);
 
         synchronized (criticalZone2) {
+            wantsToPay = true;
             this.state = ClientStateSettings.State.AT_TABLE_PAYING;
             sleepThread(1500);
-
         }
 
         this.state = ClientStateSettings.State.WALKING_OUT;
         releasePermit(tableBuffer);
-        sleepThread(500);
+        sleepThread(50);
     }
 
     public static class ClientStateSettings {

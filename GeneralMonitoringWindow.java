@@ -55,7 +55,7 @@ public class GeneralMonitoringWindow extends JFrame {
 
             model.setValueAt(clientWaitingCount, 0, 2);
             model.setValueAt(clientEatingCount + clientPayingCount, 1, 2);
-            model.setValueAt(Client.isSeatingTable == true ? 1 : 0, 3, 2);
+            model.setValueAt(Client.getIsSeatingTable() == true ? 1 : 0, 3, 2);
             model.setValueAt(clientPayingCount == 1 ? 1 : 0, 4, 2);
             clientEntranceCount = clientWaitingCount = clientEatingCount = clientPayingCount = clientLeftCount = 0;
 
