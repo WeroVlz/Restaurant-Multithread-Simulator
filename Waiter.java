@@ -71,8 +71,8 @@ public class Waiter extends Thread {
             while (takingFood) {
                 int sleepTime = random.nextInt(maxTime - minTime) + minTime;
                 sleepThread(sleepTime);
-                int finishEatingProbability = random.nextInt(16 - 1) + 1;
-                if (finishEatingProbability == 15) {
+                int finishEatingProbability = random.nextInt(11 - 1) + 1;
+                if (finishEatingProbability == 10) {
                     assignedClient.setFinishEating(true);
                     takingFood = false;
                     pickUpMoney = true;
