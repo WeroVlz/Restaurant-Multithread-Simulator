@@ -13,6 +13,8 @@ import java.util.concurrent.Semaphore;
 public class SetupWindow extends JFrame {
     private final ArrayList<Client> clients = new ArrayList<>();
     private final ArrayList<Waiter> waiters = new ArrayList<>();
+    private int maxCapacityBufferSize = 15;
+    private int tableBufferSize = 8;
 
     public SetupWindow() {
         super("Restaurant Multithread Simulator");
@@ -32,7 +34,7 @@ public class SetupWindow extends JFrame {
         panel.add(waiterLabel);
         panel.add(waiterTField);
         panel.add(executeButton);
-        panel.add(new JLabel(new ImageIcon("logo.jpeg")));
+        panel.add(new JLabel(new ImageIcon("assets/logo.jpeg")));
         panel.add(new JLabel("Ingenieria en Sistemas Graficos y Computacionales"));
         panel.add(new JLabel("Fundamentos de Programacion en Paralelo"));
         panel.add(new JLabel("Dr. Juan Carlos Lopez Pimentel"));
@@ -64,6 +66,9 @@ public class SetupWindow extends JFrame {
             new ClientControlWindow("Client Control Window", clients);
             new WaiterControlWindow("Waiter control Window", waiters);
             new AgentCommunicationLink(clients, waiters).start();
+            new EntranceCanvas(clients);
+            new LobbyCanvas(clients);
+            new RestaurantCanvas(clients, waiters);
 
         });
 
@@ -72,8 +77,8 @@ public class SetupWindow extends JFrame {
     }
 
     private void createClientThreads(int threadNumber) {
-        Semaphore maxCapacityBuffer = new Semaphore(8);
-        Semaphore tableBuffer = new Semaphore(4);
+        Semaphore maxCapacityBuffer = new Semaphore(maxCapacityBufferSize);
+        Semaphore tableBuffer = new Semaphore(tableBufferSize);
         Object cz1 = new Object();
         Object cz2 = new Object();
 

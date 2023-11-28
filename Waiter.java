@@ -1,4 +1,7 @@
+import java.awt.Image;
 import java.util.Random;
+
+import javax.swing.ImageIcon;
 
 public class Waiter extends Thread {
 
@@ -6,12 +9,16 @@ public class Waiter extends Thread {
     private boolean waiterBusy = false;
     private boolean takingFood = false;
     private boolean pickUpMoney = false;
+    private int minTime = 1500;
+    private int maxTime = 4000;
+    private Image waiterImg;
     private Client assignedClient;
     Random random = new Random();
 
     public Waiter(int i) {
         super("Waiter " + i);
         this.state = WaiterStateSettings.State.WAITING;
+        this.waiterImg = new ImageIcon("assets/mesero.png").getImage();
     }
 
     private void sleepThread(int time) {
@@ -32,6 +39,10 @@ public class Waiter extends Thread {
 
     public Client getAssignedClient() {
         return this.assignedClient;
+    }
+
+    public Image getWaiterImage() {
+        return this.waiterImg;
     }
 
     public WaiterStateSettings.State getWaiterState() {
@@ -58,7 +69,7 @@ public class Waiter extends Thread {
     public void run() {
         while (true) {
             while (takingFood) {
-                int sleepTime = random.nextInt(7000 - 3000) + 3000;
+                int sleepTime = random.nextInt(maxTime - minTime) + minTime;
                 sleepThread(sleepTime);
                 int finishEatingProbability = random.nextInt(16 - 1) + 1;
                 if (finishEatingProbability == 15) {

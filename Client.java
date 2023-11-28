@@ -1,8 +1,12 @@
+import java.awt.Image;
 import java.util.Random;
 import java.util.concurrent.Semaphore;
 
+import javax.swing.ImageIcon;
+
 public class Client extends Thread {
 
+    private final String[] imgPath = { "assets/men_client.png", "assets/group.png" };
     public ClientStateSettings.State state;
     Semaphore maxCapacityBuffer;
     Semaphore tableBuffer;
@@ -10,6 +14,8 @@ public class Client extends Thread {
     private boolean finishEating = false;
     private boolean wantsFood = false;
     private boolean wantsToPay = false;
+    private boolean isDrawed = false;
+    private Image clientImg;
     private final Object criticalZone1;
     private final Object criticalZone2;
     Random random = new Random();
@@ -21,6 +27,9 @@ public class Client extends Thread {
         this.state = ClientStateSettings.State.BORN;
         this.maxCapacityBuffer = maxCapacityBuffer;
         this.tableBuffer = tableBuffer;
+
+        int randomImg = random.nextInt(2);
+        this.clientImg = new ImageIcon(imgPath[randomImg]).getImage();
     }
 
     public static boolean getIsSeatingTable() {
@@ -49,6 +58,18 @@ public class Client extends Thread {
 
     public void setFinishEating(boolean value) {
         this.finishEating = value;
+    }
+
+    public boolean getIsDrawed() {
+        return this.isDrawed;
+    }
+
+    public void setIsDrawed(boolean value) {
+        this.isDrawed = value;
+    }
+
+    public Image getClientImage() {
+        return this.clientImg;
     }
 
     private void sleepThread(int time) {
