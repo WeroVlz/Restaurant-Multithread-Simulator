@@ -14,8 +14,8 @@ public class SetupWindow extends JFrame {
     private final ArrayList<Client> clients = new ArrayList<>();
     private final ArrayList<Waiter> waiters = new ArrayList<>();
 
-    SetupWindow() {
-        setName("Setup Window");
+    public SetupWindow() {
+        super("Restaurant Multithread Simulator");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(650, 400);
 
