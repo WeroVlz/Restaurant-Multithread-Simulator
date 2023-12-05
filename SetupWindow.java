@@ -19,10 +19,10 @@ public class SetupWindow extends JFrame {
     public SetupWindow() {
         super("Restaurant Multithread Simulator");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(650, 400);
+        setSize(650, 250);
 
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(6, 2));
+        panel.setLayout(new GridLayout(3, 2));
         JLabel clientLabel = new JLabel("Number of clients to create:");
         JTextField clientTField = new JTextField();
         JLabel waiterLabel = new JLabel("Number of waiters attending:");
@@ -34,13 +34,6 @@ public class SetupWindow extends JFrame {
         panel.add(waiterLabel);
         panel.add(waiterTField);
         panel.add(executeButton);
-        panel.add(new JLabel(new ImageIcon("assets/logo.jpeg")));
-        panel.add(new JLabel("Ingenieria en Sistemas Graficos y Computacionales"));
-        panel.add(new JLabel("Fundamentos de Programacion en Paralelo"));
-        panel.add(new JLabel("Dr. Juan Carlos Lopez Pimentel"));
-        panel.add(new JLabel("28 de noviembre del 2023"));
-        panel.add(new JLabel("0217557 - Edgar Velazquez Mercado"));
-        panel.add(new JLabel("0228930 - Juan Samuel Langarica Mejia"));
 
         executeButton.addActionListener((e) -> {
             int clientNumberThreads;
@@ -66,9 +59,6 @@ public class SetupWindow extends JFrame {
             new ClientControlWindow("Client Control Window", clients);
             new WaiterControlWindow("Waiter control Window", waiters);
             new AgentCommunicationLink(clients, waiters).start();
-            new EntranceCanvas(clients);
-            new LobbyCanvas(clients);
-            new RestaurantCanvas(clients, waiters);
 
         });
 
